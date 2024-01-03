@@ -20,9 +20,16 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        val intent = Intent(this, HomeActivity::class.java) //intent로 화면전환
+
+
+        val intent_main = Intent(this, MainActivity::class.java) //intent로 화면전환
 
         binding.btnJoinCheck.setOnClickListener { // 버튼 클릭하면
+
+            startActivity(intent_main) // intent 객체를 시작
+        }
+
+        /*binding.btnJoinCheck.setOnClickListener { // 버튼 클릭하면
 
             val id = binding.joinID.text.toString()
             val pw = binding.joinPassword.text.toString()
@@ -38,6 +45,6 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
 
-        }
+        }*/
     }
 }

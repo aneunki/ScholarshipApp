@@ -3,6 +3,7 @@ package com.scholarship.scholarshipapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.telephony.ims.RegistrationManager.RegistrationCallback
 import com.scholarship.scholarshipapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,11 +20,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        val intent = Intent(this, HomeActivity::class.java) //intent로 화면전환
+        val intent_login = Intent(this, HomeActivity::class.java) //intent로 화면전환
+        val intent_join = Intent(this, RegisterActivity::class.java) //intent로 화면전환
 
         binding.btnLogin.setOnClickListener { // 버튼 클릭하면
            
-            startActivity(intent) // intent 객체를 시작
+            startActivity(intent_login) // intent 객체를 시작
+        }
+
+        binding.btnJoin.setOnClickListener { // 버튼 클릭하면
+
+            startActivity(intent_join) // intent 객체를 시작
         }
 
 
