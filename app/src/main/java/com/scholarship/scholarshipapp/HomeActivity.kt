@@ -3,70 +3,62 @@ package com.scholarship.scholarshipapp
 import android.os.Bundle
 import android.util.Log
 import android.widget.ListView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 import java.net.URL
-import kotlin.concurrent.thread
 
 class HomeActivity : AppCompatActivity() {
-    private var scholarshipList = arrayListOf(
-        Scholarship(1, "우리문화 장학재단", "조회수", -2),
-        Scholarship(2, "2023년도 서울", "조회수", 1),
-        Scholarship(3, "푸른등대", "조회수", 0)
-    )
+
+    private lateinit var scholarshipListView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val textView1: TextView = findViewById(R.id.textview1)
-        thread(start = true){
-            try{
-                val urlText = "http://172.30.1.72:8080/query.php"
-                val url = URL(urlText)
+        scholarshipListView = findViewById(R.id.scholarshipListView)
 
-
-                val netConn = url.openConnection() as HttpURLConnection
-                netConn.readTimeout = 1500
-                netConn.requestMethod = "GET"
-                netConn.connectTimeout=5000
-                netConn.doInput = true
-
-                netConn.connect()
-
-                Log.d("BasicSyntax","${netConn.responseCode}")
-                if(netConn.responseCode == HttpURLConnection.HTTP_OK){
-                    val streamReader = InputStreamReader(netConn.inputStream, "UTF-8")
-                    val bufferedReader = BufferedReader(streamReader)
-
-                    var sb = StringBuilder()
-
-                    while(true){
-                        val line = bufferedReader.readLine() ?: break
-                        sb.append(line)
-                    }
-
-                    bufferedReader.close()
-                    netConn.disconnect()
-
-                    runOnUiThread{
-                        textView1.text = sb.toString()
-                    }
-
+        CoroutineScope(Dispatchers.IO).launch {
+            val scholarshipList = fetchScholarshipData()
+            withContext(Dispatchers.Main) {
+                if (scholarshipList != null) {
+                    val scholarshipAdapter = ScholarshipAdapter(this@HomeActivity, scholarshipList)
+                    scholarshipListView.adapter = scholarshipAdapter
+                } else {
+                    Toast.makeText(this@HomeActivity, "데이터를 불러오는데 실패했습니다.", Toast.LENGTH_LONG).show()
                 }
-
-            }catch(e:Exception){
-                e.printStackTrace()
             }
         }
+    }
 
-        val scholarshipListView: ListView = findViewById(R.id.scholarshipListView)
+    private suspend fun fetchScholarshipData(): ArrayList<Scholarship>? {
+        return try {
+            val url = URL("http://220.94.225.195/query.php")
+            val netConn = url.openConnection() as HttpURLConnection
 
-        val scholarshipAdapter = ScholarshipAdapter(this, scholarshipList)
-        scholarshipListView.adapter = scholarshipAdapter
+            netConn.run {
+                readTimeout = 1500
+                connectTimeout = 5000
+                requestMethod = "GET"
+                doInput = true
 
+                connect()
+
+                if (netConn.responseCode == HttpURLConnection.HTTP_OK) {
+                    val rawJson = netConn.inputStream.bufferedReader().use { it.readText() }
+                    val type = object : TypeToken<ScholarshipData>() {}.type
+                    val scholarshipData = Gson().fromJson<ScholarshipData>(rawJson, type)
+                    return scholarshipData.webnautes
+                } else {
+                    return null
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }

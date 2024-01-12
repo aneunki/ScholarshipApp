@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.telephony.ims.RegistrationManager.RegistrationCallback
+import android.util.Log
 import com.scholarship.scholarshipapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
