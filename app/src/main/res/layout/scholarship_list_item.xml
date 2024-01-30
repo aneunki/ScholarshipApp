@@ -10,27 +10,26 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="255dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center_vertical"
+            android:orientation="vertical"
             android:padding="15dp">
+
 
             <TextView
                 android:id="@+id/titleText"
-                android:layout_width="wrap_content"
+                android:layout_width="259dp"
                 android:layout_height="wrap_content"
                 android:text="우리다문화장학재단 대학생.."
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
-
 
             <TextView
                 android:id="@+id/descText"
-                android:layout_width="wrap_content"
+                android:layout_width="226dp"
                 android:layout_height="wrap_content"
-                android:text="설명문구 쓰는 자리입니다."
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp" />
 
         </LinearLayout>
         <LinearLayout
@@ -54,17 +53,21 @@
                 android:id="@+id/stateText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/kwangwoon_brown"
-                android:textColor="@color/white"
                 android:layout_gravity="center"
-                android:text="모집중"/>
+                android:background="@color/kwangwoon_brown"
+                android:text="모집중"
+                android:textColor="@color/white" />
 
         </LinearLayout>
+
         <ImageView
             android:id="@+id/alramImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_width="52dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_vertical"
+            android:background="#686767"
+            android:foreground="@android:drawable/ic_popup_reminder"
+            android:foregroundTint="#FFFFFF" />
 
     </LinearLayout>
 </LinearLayout>
